@@ -1,11 +1,20 @@
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-int fls(uint32_t x)
+// follow LP64 data mode
+#define fls(x)                     \
+    _Generic((x), unsigned long    \
+             : fls64, long         \
+             : fls64, int          \
+             : fls32, unsigned int \
+             : fls32, default      \
+             : fls64)(x)
+
+int fls32(uint32_t x)
 {
-    int ans = 0;
+    int ans = x > 0;
     bool m;
-    m = x < (1u << 16);
+    m = x < ((uint32_t) 1 << 16);
     ans += (m && x) << 4;
     x >>= (!m) << 4;
     m = x < (1u << 8);
@@ -19,6 +28,29 @@ int fls(uint32_t x)
     x >>= (!m) << 1;
     m = x < (1u << 1);
     ans += (m && x);
-    x >>= (!m);
-    return ans + x;
+    return ans;
+}
+
+int fls64(uint64_t x)
+{
+    int ans = x > 0;
+    bool m;
+    m = x < ((uint64_t) 1 << 32);
+    ans += (m && x) << 5;
+    x >>= (!m) << 5;
+    m = x < ((uint64_t) 1 << 16);
+    ans += (m && x) << 4;
+    x >>= (!m) << 4;
+    m = x < ((uint64_t) 1 << 8);
+    ans += (m && x) << 3;
+    x >>= (!m) << 3;
+    m = x < ((uint64_t) 1 << 4);
+    ans += (m && x) << 2;
+    x >>= (!m) << 2;
+    m = x < ((uint64_t) 1 << 2);
+    ans += (m && x) << 1;
+    x >>= (!m) << 1;
+    m = x < ((uint64_t) 1 << 1);
+    ans += (m && x);
+    return ans;
 }
