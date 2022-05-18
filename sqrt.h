@@ -15,16 +15,12 @@ uint32_t sqrt32(uint32_t x)
 {
     if (!x)
         return 0;
-    uint32_t ans = 0;
-    uint32_t shift = (log(x) & ~1u);
-    uint32_t sub = (uint32_t) 1u << shift;
-    if (x >= sub) {
-        x -= sub;
-        ans += 1;
-    }
-    while (shift) {
+    int shift = (log(x) & ~1u);
+    x -= (uint32_t) 1u << shift;
+    uint32_t ans = 1;
+    while (shift > 0) {
         shift -= 2;
-        sub = ((ans << 2) + 1) << shift;
+        uint32_t sub = ((ans << 2) | 1) << shift;
         if (x >= sub) {
             x -= sub;
             ans = (ans << 1) + 1;
@@ -40,19 +36,15 @@ uint64_t sqrt64(uint64_t x)
 {
     if (!x)
         return 0;
-    uint64_t ans = 0;
-    uint64_t shift = (log(x) & ~1u);
-    uint64_t sub = (uint64_t) 1u << shift;
-    if (x >= sub) {
-        x -= sub;
-        ans += 1;
-    }
-    while (shift) {
+    int shift = (log(x) & ~1u);
+    x -= (uint64_t) 1u << shift;
+    uint64_t ans = 1;
+    while (shift > 0) {
         shift -= 2;
-        sub = ((ans << 2) + 1) << shift;
+        uint64_t sub = ((ans << 2) | 1) << shift;
         if (x >= sub) {
             x -= sub;
-            ans = (ans << 1) + 1;
+            ans = (ans << 1) | 1;
         } else {
             ans = ans << 1;
         }
