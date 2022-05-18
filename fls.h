@@ -3,20 +3,22 @@
 
 int fls(uint32_t x)
 {
-    int lg = 0;
-    int m;
-    m = (x >= (1u << 16)) << 4;
-    lg += m;
-    x >>= m;
-    m = (x >= (1u << 8)) << 3;
-    lg += m;
-    x >>= m;
-    m = (x >= (1u << 4)) << 2;
-    lg += m;
-    x >>= m;
-    m = (x >= (1u << 2)) << 1;
-    lg += m;
-    x >>= m;
-    lg += (x >= (1u << 1));
-    return 32 - lg;
+    int ans = 0;
+    bool m;
+    m = x < (1u << 16);
+    ans += (m && x) << 4;
+    x >>= (!m) << 4;
+    m = x < (1u << 8);
+    ans += (m && x) << 3;
+    x >>= (!m) << 3;
+    m = x < (1u << 4);
+    ans += (m && x) << 2;
+    x >>= (!m) << 2;
+    m = x < (1u << 2);
+    ans += (m && x) << 1;
+    x >>= (!m) << 1;
+    m = x < (1u << 1);
+    ans += (m && x);
+    x >>= (!m);
+    return ans + x;
 }
