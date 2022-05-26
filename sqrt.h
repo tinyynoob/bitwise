@@ -1,4 +1,7 @@
-// "log.h" would be included when link with main
+#ifndef LOG_H
+#define LOG_H
+#include "log.h"
+#endif
 #include <stdint.h>
 
 // follow LP64 data mode
