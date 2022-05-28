@@ -1,13 +1,15 @@
+#ifndef __FLS_H
+#define __FLS_h
+
 #include <stdbool.h>
 #include <stdint.h>
 
-// follow LP64 data mode
-#define fls(x)                     \
-    _Generic((x), unsigned long    \
-             : fls64, long         \
-             : fls64, int          \
-             : fls32, unsigned int \
-             : fls32, default      \
+#define fls(x)                 \
+    _Generic((x), uint64_t     \
+             : fls64, int64_t  \
+             : fls64, uint32_t \
+             : fls32, int32_t  \
+             : fls32, default  \
              : fls64)(x)
 
 int fls32(uint32_t x)
@@ -54,3 +56,4 @@ int fls64(uint64_t x)
     ans += (m && x);
     return ans;
 }
+#endif

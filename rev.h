@@ -1,12 +1,15 @@
+#ifndef __REV_H
+#define __REV_H
+
 #include <stdint.h>
 
 // follow LP64 data mode
-#define rev(x)                     \
-    _Generic((x), unsigned long    \
-             : rev64, long         \
-             : rev64, int          \
-             : rev32, unsigned int \
-             : rev32, default      \
+#define rev(x)                 \
+    _Generic((x), uint32_t     \
+             : rev32, int32_t  \
+             : rev32, uint64_t \
+             : rev64, int64_t  \
+             : rev64, default  \
              : rev64)(x)
 
 // bit reversal
@@ -31,3 +34,4 @@ uint64_t rev64(uint64_t n)
     n = (n & 0x5555555555555555ul) << 1 | (n & 0xAAAAAAAAAAAAAAAAul) >> 1;
     return n;
 }
+#endif

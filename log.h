@@ -1,17 +1,14 @@
-#ifndef LOG_H
-#define LOG_H
-#include "log.h"
-#endif
+#ifndef __LOG_H
+#define __LOG_H
 
 #include <stdint.h>
 
-// follow LP64 data mode
-#define log(x)                     \
-    _Generic((x), unsigned long    \
-             : log64, long         \
-             : log64, int          \
-             : log32, unsigned int \
-             : log32, default      \
+#define log(x)                 \
+    _Generic((x), uint64_t     \
+             : log64, int64_t  \
+             : log64, uint32_t \
+             : log32, int32_t  \
+             : log32, default  \
              : log64)(x)
 
 int log32(uint32_t v)
@@ -54,3 +51,4 @@ int log64(uint64_t v)
     ret += (v > 1);
     return ret - 1;
 }
+#endif

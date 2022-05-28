@@ -1,16 +1,14 @@
-#ifndef LOG_H
-#define LOG_H
-#include "log.h"
-#endif
+#ifndef __SQRT_H
+#define __SQRT_H
+
 #include <stdint.h>
 
-// follow LP64 data mode
-#define sqrt(x)                     \
-    _Generic((x), unsigned long     \
-             : sqrt64, long         \
-             : sqrt64, int          \
-             : sqrt32, unsigned int \
-             : sqrt32, default      \
+#define sqrt(x)                 \
+    _Generic((x), uint64_t      \
+             : sqrt64, int64_t  \
+             : sqrt64, uint32_t \
+             : sqrt32, int32_t  \
+             : sqrt32, default  \
              : sqrt64)(x)
 
 // return rounding down answer
@@ -54,3 +52,4 @@ uint64_t sqrt64(uint64_t x)
     }
     return ans;
 }
+#endif
