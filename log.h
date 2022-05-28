@@ -2,6 +2,7 @@
 #define __LOG_H
 
 #include <stdint.h>
+#include "fls.h"
 
 #define log(x)                 \
     _Generic((x), uint64_t     \
@@ -11,44 +12,19 @@
              : log32, default  \
              : log64)(x)
 
+/* rounding-down base-2 logarithm
+ * log(0) is forced to -1
+ */
 int log32(uint32_t v)
 {
-    int ret = v > 0;
-    int m = (v > (uint32_t) 0xFFFFU) << 4;
-    v >>= m;
-    ret |= m;
-    m = (v > 0xFFU) << 3;
-    v >>= m;
-    ret |= m;
-    m = (v > 0xFU) << 2;
-    v >>= m;
-    ret |= m;
-    m = (v > 0x3U) << 1;
-    v >>= m;
-    ret |= m;
-    ret += (v > 1);
-    return ret - 1;
+    return (0 - !v) | (32 - fls(v));
 }
 
+/* rounding-down base-2 logarithm
+ * log(0) is forced to -1
+ */
 int log64(uint64_t v)
 {
-    int ret = v > 0;
-    int m = (v > (uint64_t) 0xFFFFFFFFU) << 5;
-    v >>= m;
-    ret |= m;
-    m = (v > (uint64_t) 0xFFFFU) << 4;
-    v >>= m;
-    ret |= m;
-    m = (v > (uint64_t) 0xFFU) << 3;
-    v >>= m;
-    ret |= m;
-    m = (v > 0xFU) << 2;
-    v >>= m;
-    ret |= m;
-    m = (v > 0x3U) << 1;
-    v >>= m;
-    ret |= m;
-    ret += (v > 1);
-    return ret - 1;
+    return (0 - !v) | (64 - fls(v));
 }
 #endif

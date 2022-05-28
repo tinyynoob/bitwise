@@ -2,6 +2,7 @@
 #define __SQRT_H
 
 #include <stdint.h>
+#include "log.h"
 
 #define sqrt(x)                 \
     _Generic((x), uint64_t      \
