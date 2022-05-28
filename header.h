@@ -1,4 +1,5 @@
 #include "fls.h"
+#include "ifs.h"
 #include "ils.h"
 #include "rev.h"
 #include "sqrt.h"
